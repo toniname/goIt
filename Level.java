@@ -15,8 +15,12 @@ class Level {
                 ", point count is " + points.length;
     }
 
-    void calculateLevelHash(){
-        
+    public int calculateLevelHash() {
+        int hash = 0;
+        for (Point point : points){
+            hash += point.getX() * point.getY();
+        }
+        return hash;
     }
 
     static class Point {
@@ -67,7 +71,7 @@ class LevelTest {
 
         Level.LevelInfo info = new Level.LevelInfo("Quarke Intro", "Easy");
 
-        //Quarke level, name is Quarke Intro, difficulty is Easy, point count is 3
-        System.out.println(new Level(info, points));
+        //3015
+        System.out.println(new Level(info, points).calculateLevelHash());
     }
 }
