@@ -16,11 +16,11 @@ class Hero {
 
     public Hero(String name, int hp) {
         this.name = name;
-        if (hp >= 0 && hp <=200){
+        if (hp >= 0 && hp <= 200) {
             this.hp = hp;
-        }else if (hp < 0){
+        } else if (hp < 0) {
             this.hp = 0;
-        }else {
+        } else {
             this.hp = 200;
         }
     }

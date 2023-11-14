@@ -1,5 +1,3 @@
-
-
 public class SpaceRocketLauncher {
     private int bigRocketCount;
     private int smallRocketCount;
