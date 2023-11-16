@@ -11,10 +11,10 @@ public class WordFrequencyCounter {
         String fileName = "words.txt"; //Тут можна замінити це ім'ям якогось файлу
         Map<String, Integer> wordFrequencyMap = countWordFrequency(fileName);
 
-        // Виводимо результати
-        for (Map.Entry<String, Integer> entry : wordFrequencyMap.entrySet()) {
-            System.out.println(entry.getKey() + " " + entry.getValue());
-        }
+        // Сортуємо результати за частотою та виводимо
+        wordFrequencyMap.entrySet().stream()
+                .sorted((entry1, entry2) -> Integer.compare(entry2.getValue(), entry1.getValue()))
+                .forEach(entry -> System.out.println(entry.getKey() + " " + entry.getValue()));
     }
 
     private static Map<String, Integer> countWordFrequency(String fileName) {
