@@ -1,5 +1,6 @@
 package modul11;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,15 +9,15 @@ public class OddToUpperCase {
     public static List<String> convertAndSortList(List<String> inputList) {
 
         List<String> result = inputList.stream()
-                .map(String::toUpperCase)
-                .sorted((s1, s2) -> s2.compareTo(s1))
-                .collect(Collectors.toList());
+                .map(String::toUpperCase)//конвертувати кожен рядок в верхній регістр
+                .sorted(Comparator.reverseOrder())//впровадити сортування за спаданням
+                .collect(Collectors.toList());//зібрати відсортований список
 
         return result;
 
     }
     public static void main(String[] args) {
-        // Приклад використання
+
         List<String> inputList = List.of("Adsdsd", "Terewt", "Wgdgdg", "Riwi");
         List<String> resultList = convertAndSortList(inputList);
 
