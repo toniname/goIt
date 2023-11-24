@@ -1,7 +1,8 @@
 package modul11;
 
 import java.util.stream.Stream;
-
+//Завдання 4
+//Використовуючи Stream.iterate, створіть безкінечний стрім випадкових чисел, але не використовуючи Math.random().
 public class LcGenerator {
 
     public static Stream<Long> generateRandomStream(long seed, long a, long c, long m) {
