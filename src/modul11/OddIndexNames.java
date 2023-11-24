@@ -3,7 +3,8 @@ package modul11;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
-
+//Завдання 1
+//Метод приймає на вхід список імен. Необхідно повернути рядок вигляду 1. Ivan, 3. Peter... лише з тими іменами, що стоять під непарним індексом (1, 3 тощо)
 public class OddIndexNames {
 
     public static String getOddIndexNames(List<String> names) {
