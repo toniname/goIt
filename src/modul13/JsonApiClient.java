@@ -9,7 +9,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -93,15 +92,17 @@ public class JsonApiClient {
 
         JsonArray postsArray = JsonParser.parseString(userPosts).getAsJsonArray();
 
-        postsArray.forEach(post -> {
-            int postId = post.getAsJsonObject().get("id").getAsInt();
-            System.out.println("Debug: Processing post with id " + postId);
+        int lastPostId = getLastPostId(postsArray);
 
-            if (postId == getLastPostId(postsArray)) {
-                String postComments = getPostComments(postId);
-                saveCommentsToFile(userId, postId, postComments);
-            }
-        });
+        IntStream.range(0, postsArray.size())
+                .filter(index -> postsArray.get(index).getAsJsonObject().get("id").getAsInt() == lastPostId)
+                .forEach(index -> {
+                    int postId = postsArray.get(index).getAsJsonObject().get("id").getAsInt();
+                    System.out.println("Debug: Processing post with id " + postId);
+
+                    String postComments = getPostComments(postId);
+                    saveCommentsToFile(userId, postId, postComments);
+                });
     }
 
     private static int getLastPostId(JsonArray postsArray) {
@@ -135,10 +136,34 @@ public class JsonApiClient {
     }
 
     private static String sendHttpRequest(String url) {
-        // Ваш код для виконання HTTP-запиту та отримання даних
-        // Приклад коду (може бути не точним для вашого випадку):
-        // Використовуйте, наприклад, HttpURLConnection або бібліотеку, таку як Apache HttpClient
-        return "";  // Замініть це на реальний результат запиту
+        try {
+            // Відкриття з'єднання
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+
+            // Налаштування методу запиту та отримання відповіді
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+
+            // Зчитування відповіді
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                reader.close();
+                return response.toString();
+            } else {
+                System.out.println("HTTP request failed with response code: " + responseCode);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ""; // Повертаємо пустий рядок у випадку помилки
     }
 
 
@@ -185,5 +210,10 @@ public class JsonApiClient {
         String usernameToGet = "johndoe"; // Припустимо, що такий користувач існує
         String userByUsername = JsonApiClient.getUserByUsername(usernameToGet);
         System.out.println("User by username: " + userByUsername);
+
+        //Тестуємо sendHttpRequest
+        String apiUrl = "https://jsonplaceholder.typicode.com/posts/1";
+        String response = sendHttpRequest(apiUrl);
+        System.out.println(response);
     }
 }
